@@ -30,15 +30,17 @@ function App() {
     SetFriends((prevFriends) => [...prevFriends, friend]);
   }
 
-  // function handleSelectedFriend(friend) {
-  //   setSelectedFriend(friend);
-  // }
+  function handleSelectedFriend(friend) {
+    // setSelectedFriend(friend);
+    setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
+    setToggleForm(false);
+  }
   return (
     <div className="app">
       <div className="sidebar">
         <FriendList
           friends={friends}
-          // handleSelectedFriend={handleSelectedFriend}
+          handleSelectedFriend={handleSelectedFriend}
           setSelectedFriend={setSelectedFriend}
           selectedFriend={selectedFriend}
         />
@@ -71,7 +73,7 @@ function FriendList({
           key={friend.id}
           selectedFriend={selectedFriend}
           setSelectedFriend={setSelectedFriend}
-          // handleSelectedFriend={handleSelectedFriend}
+          handleSelectedFriend={handleSelectedFriend}
         />
       ))}
     </ul>
@@ -80,12 +82,13 @@ function FriendList({
 
 function Friend({
   friend,
-  // handleSelectedFriend,
-  setSelectedFriend,
+  handleSelectedFriend,
+  // setSelectedFriend,
   selectedFriend,
 }) {
+  const isSelected = selectedFriend?.id === friend.id;
   return (
-    <li className={selectedFriend?.id === friend?.id ? "selected" : "close"}>
+    <li className={isSelected ? "selected" : "close"}>
       <img src={friend.image} alt={friend.name} />
       <h3>{friend.name}</h3>
       {friend.balance < 0 ? (
@@ -99,10 +102,12 @@ function Friend({
       ) : (
         <p>You and {friend.name} are even</p>
       )}
-      {/* <Button onClick={() => handleSelectedFriend(friend)}>Select</Button> */}
-      <Button onClick={() => setSelectedFriend(friend)}>
-        {selectedFriend?.id === friend.id ? "Close" : "Select"}
+      <Button onClick={() => handleSelectedFriend(friend)}>
+        {selectedFriend?.id === friend.id ? "Close " : "Select"}
       </Button>
+      {/* <Button onClick={() => setSelectedFriend(friend)}>
+        {selectedFriend?.id === friend.id ? "Close" : "Select"}
+      </Button> */}
     </li>
   );
 }
